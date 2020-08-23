@@ -57,7 +57,7 @@ class KChart extends State<StockDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return ECharts(
+    return Echarts(
       option: 
       '''
       {
