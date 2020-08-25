@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-
-// import 'package:intrust/Stock.dart';
+import 'package:intrust/widgets/k_chart.dart';
 
 class StockDetail extends StatefulWidget {
   @override
@@ -125,56 +124,13 @@ class _StockDetailState extends State<StockDetail>
                         alignment: Alignment.bottomCenter,
                         height: 300,
                         width: double.infinity,
-                        child: new Echarts(
-                          option: '''{
-                            tooltip: {
-                              trigger: 'axis',
-                              axisPointer: {
-                                animation: false, 
-                                type: 'cross'
-                              }
-                            },
-                            legend: {
-                              data: ['K', '5MA', '20MA', '60MA']
-                            },
-                            grid: {
-                              left: '3%',
-                              right: '4%',
-                              bottom: '3%',
-                              containLabel: true
-                            },
-                            xAxis: {
-                              type: 'category',
-                              boundaryGap: false,
-                              data: ${dates}
-                            },
-                            yAxis: {
-                              scale: true
-                            },
-                            series: [
-                              {
-                                name: 'K', 
-                                type: 'k', 
-                                data: ${stock_prices}
-                              },
-                              {
-                                name: '5MA',
-                                type: 'line',
-                                data: ${ma_5}
-                              },
-                              {
-                                name: '20MA',
-                                type: 'line',
-                                data: ${ma_20}
-                              },
-                              {
-                                name: '60MA',
-                                type: 'line',
-                                data: ${ma_60}
-                              }
-                            ]
-                          }''',
-                        ),
+                        child: KChart(
+                          dates: dates,
+                          prices: stock_prices,
+                          ma_5: ma_5,
+                          ma_20: ma_20,
+                          ma_60: ma_60,
+                        )
                       ),
                     ],
                   )),
