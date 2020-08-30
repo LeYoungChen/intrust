@@ -19,7 +19,7 @@ class _StockDetailState extends State<StockDetail>
     '資訊',
     '新聞',
   ];
-  
+
   @override
   void initState() {
     super.initState();
@@ -78,6 +78,12 @@ class _StockDetailState extends State<StockDetail>
       36.005,35.985,36.0175,36.0692,36.1075,
       36.1708,36.2142,36.2625,36.3575,36.4492];
 
+    List shares = [28103611, 18420314, 39872828, 32430111,
+      47553176, 48489846, 29574542, 45673024, 45488630,
+      52581909, 40607901, 25165201, 44030064, 30697478,
+      26054660, 29246381, 29402500, 64183273, 23727329,
+      33127698, 41188127, 31380116, 36814842, 24560394];
+
     return Scaffold(
       resizeToAvoidBottomPadding: false, 
       appBar: AppBar(
@@ -130,6 +136,7 @@ class _StockDetailState extends State<StockDetail>
                           ma_5: ma_5,
                           ma_20: ma_20,
                           ma_60: ma_60,
+                          shares: shares,
                         )
                       ),
                     ],

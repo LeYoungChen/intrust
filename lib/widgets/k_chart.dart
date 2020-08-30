@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import 'package:intrust/stockDetail.dart';
 
 class KChart extends StatelessWidget {
   final List dates;
@@ -8,6 +7,7 @@ class KChart extends StatelessWidget {
   final List ma_5;
   final List ma_20;
   final List ma_60;
+  final List shares;
   const KChart({
     Key key,
     this.dates,
@@ -15,6 +15,7 @@ class KChart extends StatelessWidget {
     this.ma_5,
     this.ma_20,
     this.ma_60,
+    this.shares,
   }) : super(key: key);
 
   @override
@@ -26,10 +27,12 @@ class KChart extends StatelessWidget {
           axisPointer: {
             animation: false, 
             type: 'cross'
-          }
+          }, 
+          showContent: false
         },
         legend: {
-          data: ['K', '5MA', '20MA', '60MA']
+          data: ['5MA', '20MA', '60MA'],
+          left: 'right'
         },
         grid: {
           left: '3%',
@@ -42,9 +45,18 @@ class KChart extends StatelessWidget {
           boundaryGap: false,
           data: ${dates}
         },
-        yAxis: {
+        yAxis: [{
           scale: true
-        },
+        }, {
+          scale: true, 
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          }, 
+          boundaryGap: ['0%', '80%'], 
+        }],
         dataZoom: [{
           textStyle: {
             color: '#8392A5'
@@ -79,17 +91,28 @@ class KChart extends StatelessWidget {
           {
             name: '5MA',
             type: 'line',
+            showSymbol: false, 
             data: ${ma_5}
           },
           {
             name: '20MA',
             type: 'line',
+            showSymbol: false, 
             data: ${ma_20}
           },
           {
             name: '60MA',
             type: 'line',
+            showSymbol: false, 
             data: ${ma_60}
+          },
+          {
+            name: 'shares', 
+            type: 'bar', 
+            yAxisIndex: 1, 
+            data: ${shares}, 
+            roundCap: true, 
+            barWidth: '50%', 
           }
         ]
       }''',
