@@ -269,7 +269,7 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
     return Scaffold(
       resizeToAvoidBottomPadding: false, 
       appBar: AppBar(
-        backgroundColor: Colors.redAccent.withOpacity(1),
+        backgroundColor: Color.fromRGBO(238, 239, 242, 1.0),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -277,7 +277,7 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
           },
         ),
         elevation: 0,
-        title: Text('公司名稱（代碼）'),
+        title: Text(widget.stock.name + " (" + widget.stock.idNumber + ")"),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
