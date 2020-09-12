@@ -5,7 +5,6 @@ import 'package:intrust/Stock.dart';
 
 class KChart extends StatelessWidget {
   final List<HistoricPrice> historicPrices;
-  final List<DateTime> dates;
   final List<List<dynamic>> prices;
   final List<dynamic> ma_5;
   final List<dynamic> ma_10;
@@ -16,7 +15,6 @@ class KChart extends StatelessWidget {
   const KChart({
     Key key,
     this.historicPrices,
-    this.dates,
     this.prices,
     this.ma_5,
     this.ma_10,

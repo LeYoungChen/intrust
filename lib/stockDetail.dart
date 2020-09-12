@@ -242,7 +242,6 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
     Map<String, Widget> kCharts = <String, Widget>{
       'd': KChart(
         historicPrices: widget.stock.historicPrice,
-        dates: dDates.map((string) => DateTime.parse(string)).toList(),
         prices: dStockPrices,
         ma_5: movingAvg5,
         ma_20: movingAvg20,
@@ -251,7 +250,6 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
       ),
       'w': KChart(
         historicPrices: widget.stock.historicPrice,
-        dates: wDates.map((string) => DateTime.parse(string)).toList(),
         prices: wStockPrices,
         ma_5: [],
         ma_20: [],
@@ -260,7 +258,6 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
       ),
       'm': KChart(
         historicPrices: widget.stock.historicPrice,
-        dates: mDates.map((string) => DateTime.parse(string)).toList(),
         prices: mStockPrices,
         ma_5: [],
         ma_20: [],
