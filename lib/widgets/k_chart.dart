@@ -1,25 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
+import 'package:intl/intl.dart';
+import 'package:intrust/Stock.dart';
 
 class KChart extends StatelessWidget {
-  final List dates;
-  final List prices;
-  final List ma_5;
-  final List ma_20;
-  final List ma_60;
-  final List shares;
+  final List<HistoricPrice> historicPrices;
+  final List<DateTime> dates;
+  final List<List<dynamic>> prices;
+  final List<dynamic> ma_5;
+  final List<dynamic> ma_10;
+  final List<dynamic> ma_20;
+  final List<dynamic> ma_60;
+  final List<dynamic> ma_120;
+  final List<dynamic> shares;
   const KChart({
     Key key,
+    this.historicPrices,
     this.dates,
     this.prices,
     this.ma_5,
+    this.ma_10,
     this.ma_20,
     this.ma_60,
+    this.ma_120,
     this.shares,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    historicPrices.sort((a, b) => a.date.compareTo(b.date));
+
+    DateFormat dateFormat = DateFormat("\"yyyy-MM-dd\"");
+    List<String> plottingDates = historicPrices.map((hp) => dateFormat.format(hp.date)).toList();
+
+//    List<List<double>> plottingPrices =
     // fixme: datazoom is overlapping the main chart
     // fixme: datazoom default to recent month for day k-chart and last quarter for week k-chart and last year for month k-chart
     // fixme: ask chuni: volume/shares on a separate chart of overlay on the same chart?
@@ -46,7 +61,7 @@ class KChart extends StatelessWidget {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ${dates}
+          data: ${plottingDates}
         },
         yAxis: [{
           scale: true
