@@ -36,7 +36,7 @@ class HistoricPrice {
   double close;
   double low;
   double high;
-  double volume;
+  int volume;
 
   HistoricPrice({
     this.date,
@@ -49,12 +49,12 @@ class HistoricPrice {
 
   factory HistoricPrice.fromJson(Map<String, dynamic> json) {
     return HistoricPrice(
-      date: DateTime.parse(json["date"]) as DateTime,
+      date: DateTime.parse(json["date"]),
       open: json["open"] as double,
       close: json["close"] as double,
       low: json["low"] as double,
       high: json["high"] as double,
-      volume: json["volume"] as double,
+      volume: json["volume"] as int,
     );
   }
 }
