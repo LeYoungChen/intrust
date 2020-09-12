@@ -5,7 +5,6 @@ import 'package:intrust/Stock.dart';
 
 class KChart extends StatelessWidget {
   final List<HistoricPrice> historicPrices;
-  final List<List<dynamic>> prices;
   final List<dynamic> ma_5;
   final List<dynamic> ma_10;
   final List<dynamic> ma_20;
@@ -15,7 +14,6 @@ class KChart extends StatelessWidget {
   const KChart({
     Key key,
     this.historicPrices,
-    this.prices,
     this.ma_5,
     this.ma_10,
     this.ma_20,
@@ -32,7 +30,7 @@ class KChart extends StatelessWidget {
     DateFormat dateFormat = DateFormat("\"yyyy-MM-dd\"");
     List<String> plottingDates = historicPrices.map((hp) => dateFormat.format(hp.date)).toList();
 
-//    List<List<double>> plottingPrices =
+    List<List<double>> plottingPrices = historicPrices.map((hp) => [hp.open, hp.close, hp.low, hp.high]).toList();
     // fixme: datazoom is overlapping the main chart
     // fixme: datazoom default to recent month for day k-chart and last quarter for week k-chart and last year for month k-chart
     // fixme: ask chuni: volume/shares on a separate chart of overlay on the same chart?
@@ -102,7 +100,7 @@ class KChart extends StatelessWidget {
           {
             name: 'K', 
             type: 'k', 
-            data: ${prices}
+            data: ${plottingPrices}
           },
           {
             name: '5MA',
