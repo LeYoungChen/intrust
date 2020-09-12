@@ -314,13 +314,6 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(0, 21),
-                        blurRadius: 53,
-                        color: Colors.black.withOpacity(0.05),
-                      ),
-                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
