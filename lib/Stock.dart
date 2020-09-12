@@ -1,61 +1,60 @@
 import 'package:flutter/material.dart';
 
-class Stock extends StatelessWidget {
-  final String title;
-  final double price;
-  final double priceDiff;
-  final double pctDiff;
-  final String indicator;
-  final Function press;
+class Stock {
+  String name;
+  String idNumber;
+  double openPrice;
+  double currentPrice;
+  double get priceDifference => currentPrice - openPrice;
+  double get pctPriceDifference => priceDifference / openPrice;
+  List<HistoricPrice> historicPrice;
 
-  const Stock(
-      {this.title,
-      this.price,
-      this.priceDiff,
-      this.pctDiff,
-      this.indicator,
-      this.press});
+  Stock({
+    this.name,
+    this.idNumber,
+    this.openPrice,
+    this.currentPrice,
+    this.historicPrice
+  });
 
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return GestureDetector(
-          onTap: press,
-          child: Container(
-            width: constraints.maxWidth / 2 - 10,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: SingleChildScrollView(
-                child: Column(
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: "$title ",
-                            ),
-                            TextSpan(
-                              text: "$price ",
-                            ),
-                            TextSpan(
-                              text: "$priceDiff ",
-                            ),
-                            TextSpan(
-                              text: "$pctDiff ",
-                            ),
-                          ]),
-                        ))
-                      ],
-                    ))
-              ],
-            )),
-          ));
-    });
+  factory Stock.fromJson(Map<String, dynamic> json) {
+    var hp = json["historic_price"] as List<Map<String, dynamic>>;
+    List<HistoricPrice> listHistPrice;
+    listHistPrice = hp.map<HistoricPrice>((json) => HistoricPrice.fromJson(json)).toList();
+    return Stock(
+        name: json["name"] as String,
+        idNumber: json["no"] as String,
+        openPrice: json["open"] as double,
+        currentPrice: json["price"] as double,
+        historicPrice: listHistPrice);
+  }
+}
+
+class HistoricPrice {
+  DateTime date;
+  double open;
+  double close;
+  double low;
+  double high;
+  double volume;
+
+  HistoricPrice({
+    this.date,
+    this.open,
+    this.close,
+    this.low,
+    this.high,
+    this.volume,
+  });
+
+  factory HistoricPrice.fromJson(Map<String, dynamic> json) {
+    return HistoricPrice(
+      date: DateTime.parse(json["date"]) as DateTime,
+      open: json["open"] as double,
+      close: json["close"] as double,
+      low: json["low"] as double,
+      high: json["high"] as double,
+      volume: json["volume"] as double,
+    );
   }
 }

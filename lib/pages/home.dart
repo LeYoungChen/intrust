@@ -24,13 +24,13 @@ class _HomeState extends State<Home> {
 
   int currentTab = 0; // to keep track of active tab index
   final List<Widget> screens = [
-    recommend(),
+    Recommended(),
     optional(),
     backtest(),
     machine(),
   ]; // to store tab views
 
-  Widget currentScreen = recommend(); // initial pages
+  Widget currentScreen = Recommended(); // initial pages
 
   final PageStorageBucket bucket = PageStorageBucket();
 
@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
                     minWidth: 40,
                     onPressed: (){
                       setState(() {
-                        currentScreen = recommend();
+                        currentScreen = Recommended();
                         currentTab = 0;
                       });
                     },

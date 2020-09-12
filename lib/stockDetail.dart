@@ -2,24 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intrust/Stock.dart';
 import 'package:intrust/widgets/k_chart.dart';
 
 class StockDetail extends StatefulWidget {
+  final Stock stock;
+
+  StockDetail({
+    Key key,
+    @required this.stock
+  }) : super (key: key);
+
   @override
   _StockDetailState createState() => _StockDetailState();
 }
 
 class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin {
-
-  TabController _tabController;
-
-  List tabs = [
-    '財務',
-    '籌碼',
-    '技術',
-    '資訊',
-    '新聞',
-  ];
 
   final List<String> dDates = ['"2019-06-06"',
     '"2019-06-10"', '"2019-06-11"', '"2019-06-12"', '"2019-06-13"', '"2019-06-14"',
@@ -239,13 +237,6 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
   String selectedKChartRange = 'd';
 
   @override
-  void initState() {
-    super.initState();
-    // 创建Controller
-    _tabController = TabController(length: tabs.length, vsync: this);
-  }
-
-  @override
   Widget build(BuildContext context) {
 
     Map<String, Widget> kCharts = <String, Widget>{
@@ -287,9 +278,6 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
         ),
         elevation: 0,
         title: Text('公司名稱（代碼）'),
-        bottom: TabBar(
-            controller: _tabController,
-            tabs: tabs.map((e) => Tab(text: e)).toList()),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
