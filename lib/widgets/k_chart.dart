@@ -40,8 +40,51 @@ class KChart extends StatelessWidget {
       }
     }
 
-    List<List<double>> plottingPrices = historicPrices.map((hp) => [hp.open, hp.close, hp.low, hp.high]).toList();
     List<String> dates = plottingDates();
+
+    List<List<double>> plottingPrices() {
+      if (kChartRange == 'd') {
+        return historicPrices.map((hp) => [hp.open, hp.close, hp.low, hp.high]).toList();
+      }
+      else {
+        List<DateTime> _allDates = List<DateTime>.generate(
+            historicPrices.last.date
+                .difference(historicPrices.first.date)
+                .inDays, (i) =>
+            historicPrices.first.date.add(Duration(days: i)));
+        List<List<double>> _priceDetails = [];
+        List<DateTime> _dates;
+        List<HistoricPrice> _movingWindow;
+        if (kChartRange == 'w') {
+          _dates = _allDates.where((i) => i.weekday == DateTime.monday).toList();
+        }
+        if (kChartRange == 'm') {
+          _dates = _allDates.where((i) => i.day == 1).toList();
+        }
+
+        for (int index = 0; index <= _dates.length - 1; index ++){
+          if (index < _dates.length - 1) {
+            _movingWindow = historicPrices.where((hp) => hp.date.isAfter(_dates[index]) && hp.date.isBefore(_dates[index+1])).toList();
+          }
+          else {
+            _movingWindow = historicPrices.where((hp) => hp.date.isAfter(_dates[index])).toList();
+          }
+          if (_movingWindow.length > 0) {
+            _movingWindow.sort((a, b) => a.date.compareTo(b.date));
+            _priceDetails.add([
+              _movingWindow.first.open,
+              _movingWindow.last.close,
+              _movingWindow.map((mv) => mv.low).toList().reduce((current, next) => current < next ? current : next),
+              _movingWindow.map((mv) => mv.high).toList().reduce((current, next) => current > next ? current : next)
+            ]);
+          } else {
+            dates.remove(dates[index]);
+          }
+        }
+        assert(_priceDetails.length == dates.length);
+        return _priceDetails;
+      }
+    }
 
     List<double> calculateMovingAverage(int nDay) {
       List<double> movingAvg = [];
@@ -142,7 +185,7 @@ class KChart extends StatelessWidget {
           {
             name: 'K', 
             type: 'k', 
-            data: ${plottingPrices}
+            data: ${plottingPrices()}
           },
           {
             name: '5MA',
