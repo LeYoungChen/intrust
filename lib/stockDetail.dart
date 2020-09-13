@@ -30,12 +30,15 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
     Map<String, Widget> kCharts = <String, Widget>{
       'd': KChart(
         historicPrices: widget.stock.historicPrice,
+        kChartRange: 'd',
       ),
       'w': KChart(
         historicPrices: widget.stock.historicPrice,
+        kChartRange: 'w',
       ),
       'm': KChart(
         historicPrices: widget.stock.historicPrice,
+        kChartRange: 'm',
       )
     };
 

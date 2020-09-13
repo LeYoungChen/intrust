@@ -20,9 +20,28 @@ class KChart extends StatelessWidget {
     historicPrices.sort((a, b) => a.date.compareTo(b.date));
 
     DateFormat dateFormat = DateFormat("\"yyyy-MM-dd\"");
-    List<String> plottingDates = historicPrices.map((hp) => dateFormat.format(hp.date)).toList();
+    List<String> plottingDates() {
+      if (kChartRange == 'd') {
+        return historicPrices.map((hp) => dateFormat.format(hp.date)).toList();
+      } else {
+        List<DateTime> _allDates = List<DateTime>.generate(
+            historicPrices.last.date
+                .difference(historicPrices.first.date)
+                .inDays, (i) =>
+            historicPrices.first.date.add(Duration(days: i)));
+        if (kChartRange == 'w') {
+          List<DateTime> outputtingDateTime = _allDates.where((i) => i.weekday == DateTime.monday).toList();
+          return outputtingDateTime.map((d) => dateFormat.format(d)).toList();
+        }
+        if (kChartRange == 'm') {
+          List<DateTime> outputtingDateTime = _allDates.where((i) => i.day == 1).toList();
+          return outputtingDateTime.map((d) => dateFormat.format(d)).toList();
+        }
+      }
+    }
 
     List<List<double>> plottingPrices = historicPrices.map((hp) => [hp.open, hp.close, hp.low, hp.high]).toList();
+    List<String> dates = plottingDates();
 
     List<double> calculateMovingAverage(int nDay) {
       List<double> movingAvg = [];
@@ -80,7 +99,7 @@ class KChart extends StatelessWidget {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ${plottingDates}
+          data: ${dates}
         },
         yAxis: [{
           scale: true
