@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:intl/intl.dart';
+import 'package:moving_average/moving_average.dart';
 import 'package:intrust/Stock.dart';
 
 class KChart extends StatelessWidget {
   final List<HistoricPrice> historicPrices;
-  final List<dynamic> ma_5;
-  final List<dynamic> ma_10;
-  final List<dynamic> ma_20;
-  final List<dynamic> ma_60;
-  final List<dynamic> ma_120;
   final List<dynamic> shares;
+
   const KChart({
     Key key,
     this.historicPrices,
-    this.ma_5,
-    this.ma_10,
-    this.ma_20,
-    this.ma_60,
-    this.ma_120,
     this.shares,
   }) : super(key: key);
 
@@ -31,6 +23,30 @@ class KChart extends StatelessWidget {
     List<String> plottingDates = historicPrices.map((hp) => dateFormat.format(hp.date)).toList();
 
     List<List<double>> plottingPrices = historicPrices.map((hp) => [hp.open, hp.close, hp.low, hp.high]).toList();
+
+    List<double> calculateMovingAverage(int nDay) {
+      List<double> movingAvg = [];
+      List<double> movingWindow = List<double>(nDay);
+      for (int index = 1; index <= historicPrices.length; index++) {
+        if (index < nDay) {
+          movingAvg.add(null);
+        } else {
+          movingWindow = historicPrices.sublist(index-nDay, index).map((hp) => hp.close).toList();
+          num sum = 0;
+          movingWindow.forEach((num e){sum += e;});
+          movingAvg.add(sum / movingWindow.length);
+        }
+      }
+      assert(movingAvg.length == historicPrices.length);
+      return movingAvg;
+    }
+
+    List<double> plottingMovingAvg_5d = calculateMovingAverage(5);
+    List<double> plottingMovingAvg_10d = calculateMovingAverage(10);
+    List<double> plottingMovingAvg_20d = calculateMovingAverage(20);
+    List<double> plottingMovingAvg_60d = calculateMovingAverage(60);
+    List<double> plottingMovingAvg_120d = calculateMovingAverage(120);
+    List<double> plottingMovingAvg_240d = calculateMovingAverage(240);
     // fixme: datazoom is overlapping the main chart
     // fixme: datazoom default to recent month for day k-chart and last quarter for week k-chart and last year for month k-chart
     // fixme: ask chuni: volume/shares on a separate chart of overlay on the same chart?
@@ -106,19 +122,19 @@ class KChart extends StatelessWidget {
             name: '5MA',
             type: 'line',
             showSymbol: false, 
-            data: ${ma_5}
+            data: ${plottingMovingAvg_5d}
           },
           {
             name: '20MA',
             type: 'line',
             showSymbol: false, 
-            data: ${ma_20}
+            data: ${plottingMovingAvg_20d}
           },
           {
             name: '60MA',
             type: 'line',
             showSymbol: false, 
-            data: ${ma_60}
+            data: ${plottingMovingAvg_60d}
           },
           {
             name: 'shares', 
