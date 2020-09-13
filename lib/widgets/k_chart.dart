@@ -103,11 +103,16 @@ class KChart extends StatelessWidget {
       return movingAvg;
     }
 
-    List<double> plottingMovingAvg_5d = calculateMovingAverage(5);
-    List<double> plottingMovingAvg_20d = calculateMovingAverage(20);
-    List<double> plottingMovingAvg_60d = calculateMovingAverage(60);
-    List<double> plottingMovingAvg_120d = calculateMovingAverage(120);
-    List<double> plottingMovingAvg_240d = calculateMovingAverage(240);
+    List<int> movingAvgLines;
+    if (kChartRange == 'd') {
+      movingAvgLines = [5, 20, 60];
+    }
+    if (kChartRange == 'w') {
+      movingAvgLines = [10, 20, 60];
+    }
+    if (kChartRange == 'm') {
+      movingAvgLines = [20, 60, 120];
+    }
 
 //    List<double> calculateTotalShares(String range) {
 //      List<double> movingAvg = [];
@@ -188,22 +193,22 @@ class KChart extends StatelessWidget {
             data: ${plottingPrices()}
           },
           {
-            name: '5MA',
+            name: '${movingAvgLines[0]}MA',
             type: 'line',
             showSymbol: false, 
-            data: ${plottingMovingAvg_5d}
+            data: ${calculateMovingAverage(movingAvgLines[0])}
           },
           {
-            name: '20MA',
+            name: '${movingAvgLines[1]}MA',
             type: 'line',
             showSymbol: false, 
-            data: ${plottingMovingAvg_20d}
+            data: ${calculateMovingAverage(movingAvgLines[1])}
           },
           {
-            name: '60MA',
+            name: '${movingAvgLines[2]}MA',
             type: 'line',
             showSymbol: false, 
-            data: ${plottingMovingAvg_60d}
+            data: ${calculateMovingAverage(movingAvgLines[2])}
           },
           {
             name: 'shares', 
