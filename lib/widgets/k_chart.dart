@@ -6,12 +6,12 @@ import 'package:intrust/Stock.dart';
 
 class KChart extends StatelessWidget {
   final List<HistoricPrice> historicPrices;
-  final List<dynamic> shares;
+  final String kChartRange;
 
   const KChart({
     Key key,
     this.historicPrices,
-    this.shares,
+    this.kChartRange,
   }) : super(key: key);
 
   @override
@@ -42,11 +42,18 @@ class KChart extends StatelessWidget {
     }
 
     List<double> plottingMovingAvg_5d = calculateMovingAverage(5);
-    List<double> plottingMovingAvg_10d = calculateMovingAverage(10);
     List<double> plottingMovingAvg_20d = calculateMovingAverage(20);
     List<double> plottingMovingAvg_60d = calculateMovingAverage(60);
     List<double> plottingMovingAvg_120d = calculateMovingAverage(120);
     List<double> plottingMovingAvg_240d = calculateMovingAverage(240);
+
+//    List<double> calculateTotalShares(String range) {
+//      List<double> movingAvg = [];
+//      List<double> movingWindow;
+//    }
+//
+//    List<double> plottingVolumes = calculateTotalShares('d');
+    List<int> plottingVolumes = historicPrices.map((hp) => hp.volume).toList();
     // fixme: datazoom is overlapping the main chart
     // fixme: datazoom default to recent month for day k-chart and last quarter for week k-chart and last year for month k-chart
     // fixme: ask chuni: volume/shares on a separate chart of overlay on the same chart?
@@ -140,7 +147,7 @@ class KChart extends StatelessWidget {
             name: 'shares', 
             type: 'bar', 
             yAxisIndex: 1, 
-            data: ${shares}, 
+            data: ${plottingVolumes}, 
             roundCap: true, 
             barWidth: '50%', 
           }
