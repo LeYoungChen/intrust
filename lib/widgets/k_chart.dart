@@ -86,9 +86,6 @@ class KChart extends StatelessWidget {
       movingAvgLines = [20, 60, 120];
     }
 
-    // fixme: datazoom is overlapping the main chart
-    // fixme: datazoom default to recent month for day k-chart and last quarter for week k-chart and last year for month k-chart
-    // fixme: ask chuni: volume/shares on a separate chart of overlay on the same chart?
     return Echarts(
       option: '''{
         tooltip: {
