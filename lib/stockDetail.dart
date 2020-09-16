@@ -96,7 +96,7 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
                     children: <Widget>[
                       Container(
                         alignment: Alignment.bottomCenter,
-                        height: 300,
+                        height: 250,
                         width: double.infinity,
                         child: kCharts[selectedKChartRange]
                       ),
