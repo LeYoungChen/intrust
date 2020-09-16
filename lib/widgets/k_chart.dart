@@ -103,28 +103,45 @@ class KChart extends StatelessWidget {
           data: ['${movingAvgLines[0]}MA', '${movingAvgLines[1]}MA', '${movingAvgLines[2]}MA'],
           left: 'right'
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
+        grid: [{
+          left: '10%',
+          right: '8%',
+          height: '40%',
+        }, {
+          left: '10%', 
+          right: '8%', 
+          top: '70%', 
+          height: '10%'
+        }],
+        xAxis: [{
           type: 'category',
           boundaryGap: false,
-          data: ${kDateRange.map((tp) => tp.name).toList()}
-        },
+          data: ${kDateRange.map((tp) => tp.name).toList()}, 
+          axisLine: {onZero: false},
+          splitLine: {show: false},
+          axisTick: {show: false},
+          axisLabel: {show: false},
+        }, {
+          type: 'category',
+          gridIndex: 1,
+          boundaryGap: false,
+          data: ${kDateRange.map((tp) => tp.name).toList()}, 
+          axisLine: {onZero: false},
+          splitLine: {show: false},
+          axisTick: {show: false},
+        }],
         yAxis: [{
-          scale: true
+          scale: true, 
         }, {
           scale: true, 
+          gridIndex: 1,
           axisTick: {
             show: false
           },
           axisLabel: {
             show: false
           }, 
-          boundaryGap: ['0%', '80%'], 
+          splitLine: {show: false}, 
         }],
         dataZoom: [{
           textStyle: {
@@ -147,7 +164,13 @@ class KChart extends StatelessWidget {
             shadowColor: 'rgba(0, 0, 0, 0.6)',
             shadowOffsetX: 2,
             shadowOffsetY: 2
-          }
+          }, 
+          bottom: 0, 
+          height: 20, 
+          minValueSpan: ${30 / movingAvgLines[0]}, 
+          start: ${100 - 12 / kDateRange.length * 100}, 
+          end: 100, 
+          xAxisIndex: [0, 1]
         }, {
           type: 'inside'
         }],
@@ -178,6 +201,7 @@ class KChart extends StatelessWidget {
           {
             name: 'shares', 
             type: 'bar', 
+            xAxisIndex: 1, 
             yAxisIndex: 1, 
             data: ${kDateRange.map((tp) => tp.totalVolume).toList()}, 
             roundCap: true, 
