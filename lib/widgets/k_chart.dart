@@ -39,13 +39,13 @@ class KChart extends StatelessWidget {
     }
 
     List<TimePeriod> determineDateRange() {
-      if (kChartRange == 'd') {
+      if (kChartRange == 'D') {
         return historicPrices.map((hp) => TimePeriod(
           name: dateFormat.format(hp.date),
           dataInRange: [hp],
         )).toList();
       } else {
-        if (kChartRange == 'w') {
+        if (kChartRange == 'W') {
           return breakDownByRange(weekNumber);
         } else {
           return breakDownByRange(monthNumber);
@@ -76,13 +76,13 @@ class KChart extends StatelessWidget {
     }
 
     List<int> movingAvgLines;
-    if (kChartRange == 'd') {
+    if (kChartRange == 'D') {
       movingAvgLines = [5, 20, 60];
     }
-    if (kChartRange == 'w') {
+    if (kChartRange == 'W') {
       movingAvgLines = [10, 20, 60];
     }
-    if (kChartRange == 'm') {
+    if (kChartRange == 'M') {
       movingAvgLines = [20, 60, 120];
     }
 

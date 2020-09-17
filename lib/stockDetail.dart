@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intrust/HistoricPrice.dart';
 import 'package:intrust/Stock.dart';
 import 'package:intrust/widgets/k_chart.dart';
 
@@ -18,29 +19,9 @@ class StockDetail extends StatefulWidget {
 }
 
 class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin {
-  // fixme: ask Chuni, what to do with the mvAvg lines in week k-chart and month k-chart
-  // fixme: wStockPrices and mSrockPrices need to be updated, currently taking the data for that date
-  // fixme: wShares and mShares also need to be updated to be the sum of shares within that time range (also check with Chuni whether this is the right column LOL, shouldn't it be volume?)
-
-  String selectedKChartRange = 'd';
 
   @override
   Widget build(BuildContext context) {
-
-    Map<String, Widget> kCharts = <String, Widget>{
-      'd': KChart(
-        historicPrices: widget.stock.historicPrice,
-        kChartRange: 'd',
-      ),
-      'w': KChart(
-        historicPrices: widget.stock.historicPrice,
-        kChartRange: 'w',
-      ),
-      'm': KChart(
-        historicPrices: widget.stock.historicPrice,
-        kChartRange: 'm',
-      )
-    };
 
     return Scaffold(
       resizeToAvoidBottomPadding: false, 
@@ -56,27 +37,76 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
         title: Text(widget.stock.name + " (" + widget.stock.idNumber + ")"),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: double.infinity,
-            maxWidth: double.infinity,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                // fixme: use Stack and Positioned to overlap the segmented control and the KChart
-                // https://stackoverflow.com/questions/49838021/how-do-i-stack-widgets-overlapping-each-other-in-flutter
-                // https://api.flutter.dev/flutter/widgets/Stack-class.html
-                Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        child: kChartDisplay(historicPrices: widget.stock.historicPrice)
+      ),
+    );
+  }
+}
+
+class kChartDisplay extends StatefulWidget {
+  final List<HistoricPrice> historicPrices;
+
+  kChartDisplay({
+    Key key,
+    @required this.historicPrices
+  }) : super (key: key);
+
+  @override
+  _kChartDisplayState createState() => _kChartDisplayState();
+}
+
+class _kChartDisplayState extends State<kChartDisplay> {
+
+  String selectedKChartRange = 'd';
+
+  @override
+  Widget build (BuildContext context) {
+
+    Map<String, String> kChartRanges = <String, String>{
+      'd': 'D',
+      'w': 'W',
+      'm': 'M',
+    };
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: double.infinity,
+        maxWidth: double.infinity,
+      ),
+      child: SingleChildScrollView(
+        child: new Stack(
+          children: <Widget>[
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        alignment: Alignment.bottomCenter,
+                        height: 250,
+                        width: double.infinity,
+                        child: KChart(
+                          historicPrices: widget.historicPrices,
+                          kChartRange: kChartRanges[selectedKChartRange],
+                        )
+                    ),
+                  ],
+                )
+            ),
+            new Positioned(
+              child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
                   alignment: Alignment.centerLeft,
                   child: CupertinoSlidingSegmentedControl(
                     groupValue: selectedKChartRange,
                     children: {
-                      'd': Text(' D '),
-                      'w': Text(' W '),
-                      'm': Text(' M '),
+                      'd': Text('D'),
+                      'w': Text('W'),
+                      'm': Text('M'),
                     },
                     onValueChanged: (value) {
                       setState(() {
@@ -84,27 +114,9 @@ class _StockDetailState extends State<StockDetail> with TickerProviderStateMixin
                       });
                     },
                   )
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        height: 250,
-                        width: double.infinity,
-                        child: kCharts[selectedKChartRange]
-                      ),
-                    ],
-                  )),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
