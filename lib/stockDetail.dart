@@ -23,13 +23,18 @@ class _StockDetailState extends State<StockDetail>
         appBar: _buildAppBar(context, widget.stock),
         body: Column(
           children: <Widget>[
-            AdditionalInformation(
+            BasicInformation(
               stock: widget.stock,
             ),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                 child:
-                    kChartDisplay(historicPrices: widget.stock.historicPrice)),
+                    kChartDisplay(historicPrices: widget.stock.historicPrice)
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: AdditionalInformation(stock: widget.stock)
+            ),
           ],
         ));
   }
@@ -53,16 +58,16 @@ AppBar _buildAppBar(BuildContext context, Stock stock) {
   );
 }
 
-class AdditionalInformation extends StatefulWidget {
+class BasicInformation extends StatefulWidget {
   final Stock stock;
 
-  AdditionalInformation({
+  BasicInformation({
     Key key,
     this.stock,
   }) : super(key: key);
 
   @override
-  _additionalInformationState createState() => _additionalInformationState(
+  _basicInformationState createState() => _basicInformationState(
     open: stock.open.toStringAsFixed(2),
     close: stock.close.toStringAsFixed(2),
     low: stock.low.toStringAsFixed(2),
@@ -71,14 +76,14 @@ class AdditionalInformation extends StatefulWidget {
   );
 }
 
-class _additionalInformationState extends State<AdditionalInformation> {
+class _basicInformationState extends State<BasicInformation> {
   String open;
   String close;
   String low;
   String high;
   String volume;
 
-  _additionalInformationState({
+  _basicInformationState({
     Key key,
     this.open,
     this.close,
@@ -288,6 +293,208 @@ class _kChartDisplayState extends State<kChartDisplay> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class AdditionalInformation extends StatefulWidget {
+  final Stock stock;
+
+  AdditionalInformation({Key key, @required this.stock}) : super(key: key);
+
+  @override
+  _AdditionalInformationState createState() => _AdditionalInformationState();
+}
+
+class _AdditionalInformationState extends State<AdditionalInformation> {
+
+  String selectedTab = 'financial';
+
+  Widget financialHeatMap() {
+
+    Widget heatmapUnit(String text, num value) {
+      Color heatColour;
+      if (value == null) {
+        heatColour = Color.fromRGBO(241, 241, 241, 1);
+      } else if (value > 0.15) {
+        heatColour = Color.fromRGBO(225, 48, 34, 1);
+      } else if (value > 0.1) {
+        heatColour = Color.fromRGBO(240, 148, 142, 1);
+      } else if (value > 0.05) {
+        heatColour = Color.fromRGBO(242, 213, 213, 1);
+      } else if (value < -0.15) {
+        heatColour = Color.fromRGBO(136, 199, 60, 1);
+      } else if (value < -0.1) {
+        heatColour = Color.fromRGBO(166, 226, 102, 1);
+      } else if (value < -0.05) {
+        heatColour = Color.fromRGBO(199, 229, 151, 1);
+      } else {
+        heatColour = Color.fromRGBO(196, 196, 196, 1);
+      }
+
+      return SizedBox(
+        width: 60,
+        height: 40,
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: heatColour,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+          ),),
+      );
+    }
+
+    SizedBox spacing = SizedBox(height: 5, width: 5,);
+
+    return Container(
+      child: Row(children: <Widget>[
+        Column(
+          children: <Widget>[
+            heatmapUnit("指標", null),
+            spacing,
+            heatmapUnit("PEG", null),
+            spacing,
+            heatmapUnit("CFER", null),
+            spacing,
+            heatmapUnit("GVI", null),
+            spacing,
+            heatmapUnit("Debt Ratio", null),
+          ],
+        ),
+        spacing,
+        Column(
+          children: <Widget>[
+            heatmapUnit("去年", null),
+            spacing,
+            heatmapUnit("", 0.07),
+            spacing,
+            heatmapUnit("", 0.07),
+            spacing,
+            heatmapUnit("", -0.12),
+            spacing,
+            heatmapUnit("", 0),
+          ],
+        ),
+        spacing,
+        Column(
+          children: <Widget>[
+            heatmapUnit("今年", null),
+            spacing,
+            heatmapUnit("", 0.07),
+            spacing,
+            heatmapUnit("", 0.07),
+            spacing,
+            heatmapUnit("", 0),
+            spacing,
+            heatmapUnit("", -0.17),
+          ],
+        ),
+        spacing,
+        Column(
+          children: <Widget>[
+            heatmapUnit("上個月", null),
+            spacing,
+            heatmapUnit("", 0.12),
+            spacing,
+            heatmapUnit("", 0.17),
+            spacing,
+            heatmapUnit("", -0.07),
+            spacing,
+            heatmapUnit("", 0),
+          ],
+        ),
+        spacing,
+        Column(
+          children: <Widget>[
+            heatmapUnit("這個月", null),
+            spacing,
+            heatmapUnit("", 0.17),
+            spacing,
+            heatmapUnit("", 0.12),
+            spacing,
+            heatmapUnit("", -0.17),
+            spacing,
+            heatmapUnit("", 0.07),
+          ],
+        ),
+      ],),
+    );
+  }
+  
+  Widget button(String tabKey, String title) {
+
+    Color buttonColour;
+    Color textColour;
+    if (tabKey == selectedTab) {
+      buttonColour = Color.fromRGBO(225, 48, 34, 1);
+      textColour = Colors.white;
+    } else {
+      buttonColour = Color.fromRGBO(250, 250, 250, 1);
+      textColour = Colors.black;
+    }
+
+    return
+      ButtonTheme(
+        minWidth: 55,
+        height: 30,
+        child: RaisedButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              side: BorderSide(color: buttonColour)),
+          onPressed: () {
+            setState(() {
+              selectedTab = tabKey;
+            });
+          },
+          color: buttonColour,
+          textColor: textColour,
+          child: Text(title, style: TextStyle(fontSize: 12)),
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    final Map<String, Widget> subTabs = {
+      'financial': financialHeatMap(),
+      'chip': Container(child: Text('chip'),),
+      'technical': Container(child: Text('technical'),),
+      'sector_information': Container(child: Text('sector_information'),),
+      'news': Container(child: Text('news'),),
+    };
+
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: double.infinity,
+        maxWidth: double.infinity,
+      ),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(241, 241, 241, 1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.only(left: 15, right: 5, bottom: 15),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              button('financial', '財務'),
+              SizedBox(width: 10, ),
+              button('chip', '籌碼'),
+              SizedBox(width: 10, ),
+              button('technical', '技術'),
+              SizedBox(width: 10, ),
+              button('sector_information', '產業資訊'),
+              SizedBox(width: 10, ),
+              button('news', '新聞'),
+            ],
+          ),
+          subTabs[selectedTab]
+        ],
+      )
     );
   }
 }
