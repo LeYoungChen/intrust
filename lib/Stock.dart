@@ -55,4 +55,8 @@ class Stock {
       size: 12,
     );
   }
+
+  String get compactVolume {
+    return NumberFormat.compact().format(volume).toString();
+  }
 }
