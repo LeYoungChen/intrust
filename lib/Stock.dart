@@ -1,4 +1,5 @@
 import 'package:intrust/HistoricPrice.dart';
+import 'package:flutter/material.dart';
 
 class Stock {
   String name;
@@ -27,5 +28,27 @@ class Stock {
         openPrice: json["open"] as double,
         currentPrice: json["price"] as double,
         historicPrice: listHistPrice);
+  }
+
+  Color get valueColour {
+    if (priceDifference < 0) {
+      return Color.fromRGBO(89, 211, 48, 1);
+    }
+    return Color.fromRGBO(220, 23, 17, 1);
+  }
+
+  Icon get priceChangeIcon {
+    if (priceDifference < 0) {
+      return Icon(
+        Icons.arrow_drop_down,
+        color: valueColour,
+        size: 12,
+      );
+    }
+    return Icon(
+      Icons.arrow_drop_up,
+      color: valueColour,
+      size: 12,
+    );
   }
 }

@@ -14,28 +14,6 @@ class StockTable extends StatefulWidget {
 class StockTableState extends State<StockTable> {
   List<Stock> _stocks;
 
-  Color valueColour(Stock stock) {
-    if (stock.priceDifference < 0) {
-      return Color.fromRGBO(89, 211, 48, 1);
-    }
-    return Color.fromRGBO(220, 23, 17, 1);
-  }
-
-  Icon priceChangeIcon(Stock stock) {
-    if (stock.priceDifference < 0) {
-      return Icon(
-        Icons.arrow_drop_down,
-        color: valueColour(stock),
-        size: 12,
-      );
-    }
-    return Icon(
-      Icons.arrow_drop_up,
-      color: valueColour(stock),
-      size: 12,
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -103,7 +81,7 @@ class StockTableState extends State<StockTable> {
                           Container(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              stock.currentPrice.toStringAsFixed(2),
+                              stock.price.toStringAsFixed(2),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -122,7 +100,7 @@ class StockTableState extends State<StockTable> {
                                 stock.priceDifference.toStringAsFixed(2),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: valueColour(stock),
+                                  color: stock.valueColour,
                                 ),
                               ),
                               Text(
@@ -131,7 +109,7 @@ class StockTableState extends State<StockTable> {
                                     " %",
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: valueColour(stock),
+                                  color: stock.valueColour,
                                 ),
                               ),
                             ],
@@ -140,7 +118,7 @@ class StockTableState extends State<StockTable> {
                         ),
                         DataCell(
                           // triangle icon
-                          priceChangeIcon(stock),
+                          stock.priceChangeIcon,
                           onTap: () {toDetailPage(stock);},
                         )
                       ],
