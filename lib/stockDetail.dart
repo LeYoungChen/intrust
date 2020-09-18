@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intrust/HistoricPrice.dart';
@@ -63,12 +62,34 @@ class AdditionalInformation extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _additionalInformationState createState() => _additionalInformationState();
+  _additionalInformationState createState() => _additionalInformationState(
+    open: stock.open.toStringAsFixed(2),
+    close: stock.close.toStringAsFixed(2),
+    low: stock.low.toStringAsFixed(2),
+    high: stock.high.toStringAsFixed(2),
+    volume: stock.compactVolume,
+  );
 }
 
 class _additionalInformationState extends State<AdditionalInformation> {
+  String open;
+  String close;
+  String low;
+  String high;
+  String volume;
+
+  _additionalInformationState({
+    Key key,
+    this.open,
+    this.close,
+    this.low,
+    this.high,
+    this.volume,
+  });
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Color.fromRGBO(238, 239, 242, 1.0),
       width: double.infinity,
@@ -127,12 +148,10 @@ class _additionalInformationState extends State<AdditionalInformation> {
                     children: <Widget>[
                       Text(
                         "成交量",
-                        style: TextStyle(
-                            fontSize: 14
-                        ),
+                        style: TextStyle(fontSize: 14),
                       ),
                       Text(
-                        widget.stock.compactVolume,
+                        volume,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -154,13 +173,11 @@ class _additionalInformationState extends State<AdditionalInformation> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "開",
-                        style: TextStyle(
-                            fontSize: 14
-                        ),
+                        "高",
+                        style: TextStyle(fontSize: 14),
                       ),
                       Text(
-                        widget.stock.open.toStringAsFixed(2),
+                        high,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -182,13 +199,11 @@ class _additionalInformationState extends State<AdditionalInformation> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "收",
-                        style: TextStyle(
-                            fontSize: 14
-                        ),
+                        "低",
+                        style: TextStyle(fontSize: 14),
                       ),
                       Text(
-                        widget.stock.close.toStringAsFixed(2),
+                        low,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -236,7 +251,7 @@ class _kChartDisplayState extends State<kChartDisplay> {
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color.fromRGBO(241, 241, 241, 1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(

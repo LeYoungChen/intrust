@@ -88,6 +88,7 @@ class KChart extends StatelessWidget {
 
     return Echarts(
       option: '''{
+        backgroundColor: 'rgba(241, 241, 241, 1)',
         tooltip: {
           trigger: 'axis',
           axisPointer: {
