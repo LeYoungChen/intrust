@@ -1,20 +1,25 @@
 import 'package:intrust/HistoricPrice.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Stock {
   String name;
   String idNumber;
-  double openPrice;
-  double currentPrice;
-  double get priceDifference => currentPrice - openPrice;
-  double get pctPriceDifference => priceDifference / openPrice;
+  double price;
+  HistoricPrice get latestPrice => historicPrice.reduce((value, element) => value.date.isAfter(element.date) ? value : element);
+  double get open => latestPrice.open;
+  double get close => latestPrice.close;
+  double get low => latestPrice.low;
+  double get high => latestPrice.high;
+  int get volume => latestPrice.volume;
+  double get priceDifference => price - open;
+  double get pctPriceDifference => priceDifference / open;
   List<HistoricPrice> historicPrice;
 
   Stock({
     this.name,
     this.idNumber,
-    this.openPrice,
-    this.currentPrice,
+    this.price,
     this.historicPrice
   });
 
@@ -25,8 +30,7 @@ class Stock {
     return Stock(
         name: json["name"] as String,
         idNumber: json["no"] as String,
-        openPrice: json["open"] as double,
-        currentPrice: json["price"] as double,
+        price: json["price"] as double,
         historicPrice: listHistPrice);
   }
 
