@@ -1,9 +1,11 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intrust/HistoricPrice.dart';
 import 'package:intrust/Stock.dart';
 import 'package:intrust/widgets/k_chart.dart';
+import 'package:intl/intl.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 
 class StockDetail extends StatefulWidget {
   final Stock stock;
@@ -21,22 +23,35 @@ class _StockDetailState extends State<StockDetail>
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: _buildAppBar(context, widget.stock),
-        body: Column(
-          children: <Widget>[
-            BasicInformation(
-              stock: widget.stock,
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                child:
-                    kChartDisplay(historicPrices: widget.stock.historicPrice)
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                child: AdditionalInformation(stock: widget.stock)
-            ),
-          ],
-        ));
+        body: new ListView.builder(
+            itemCount: 1,
+            padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              return new StickyHeader(
+                header: Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.width * 0.3,
+                  child: BasicInformation(
+                    stock: widget.stock,
+                  ),
+                ),
+                content: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, top: 10),
+                          child: kChartDisplay(
+                              historicPrices: widget.stock.historicPrice)),
+                      Padding(
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
+                          child: AdditionalInformation(stock: widget.stock)),
+                    ],
+                  ),
+                ),
+              );
+            }));
   }
 }
 
@@ -98,128 +113,173 @@ class _basicInformationState extends State<BasicInformation> {
     return Container(
       color: Color.fromRGBO(238, 239, 242, 1.0),
       width: double.infinity,
-      height: 130.0,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(
-            widget.stock.idNumber,
-            style: TextStyle(
-              color: Color.fromRGBO(151, 153, 154, 1),
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-          const Divider(
-            color: Color.fromRGBO(151, 153, 154, 1),
-            height: 20,
-            thickness: 0.5,
-            indent: 20,
-            endIndent: 20,
-          ),
-          IntrinsicHeight(
-            child: Row(
+          Expanded(
+            flex: 3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        widget.stock.price.toStringAsFixed(2),
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 32),
-                      ),
-                      Text(
-                        widget.stock.priceDifference.toStringAsFixed(2) +
-                            " (" +
-                            widget.stock.pctPriceDifference.toStringAsFixed(2) +
-                            "%)",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: widget.stock.valueColour,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  width: 75,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "成交量",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Text(
-                        volume,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const VerticalDivider(
-                  color: Color.fromRGBO(151, 153, 154, 1),
-                  indent: 15,
-                  endIndent: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  width: 75,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "高",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Text(
-                        high,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const VerticalDivider(
-                  color: Color.fromRGBO(151, 153, 154, 1),
-                  indent: 15,
-                  endIndent: 15,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  width: 75,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "低",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Text(
-                        low,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
+                Expanded(
+                  child: AutoSizeText(
+                    widget.stock.idNumber,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Color.fromRGBO(151, 153, 154, 1),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
                   ),
                 ),
               ],
             ),
-          )
+          ),
+          Expanded(
+            flex: 1,
+            child: const Divider(
+              color: Color.fromRGBO(151, 153, 154, 1),
+              height: 15,
+              thickness: 0.5,
+              indent: 20,
+              endIndent: 20,
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 7,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Container(),
+                          ),
+                          Expanded(
+                            flex: 8,
+                            child: FractionallySizedBox(
+                              child: AutoSizeText(
+                                widget.stock.price.toStringAsFixed(2),
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 32),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: AutoSizeText(
+                              widget.stock.priceDifference.toStringAsFixed(2) +
+                                  " (" +
+                                  widget.stock.pctPriceDifference.toStringAsFixed(2) +
+                                  "%)",
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              minFontSize: 2,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                color: widget.stock.valueColour,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          AutoSizeText(
+                            "成交量",
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          AutoSizeText(
+                            volume,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: const VerticalDivider(
+                      color: Color.fromRGBO(151, 153, 154, 1),
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "高",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            high,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: const VerticalDivider(
+                      color: Color.fromRGBO(151, 153, 154, 1),
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "低",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            low,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+            ),
+          ),
         ],
       ),
     );
@@ -250,8 +310,7 @@ class _kChartDisplayState extends State<kChartDisplay> {
         maxHeight: double.infinity,
         maxWidth: double.infinity,
       ),
-      child: SingleChildScrollView(
-        child: new Stack(
+      child: new Stack(
           children: <Widget>[
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
@@ -292,7 +351,6 @@ class _kChartDisplayState extends State<kChartDisplay> {
             ),
           ],
         ),
-      ),
     );
   }
 }
@@ -332,95 +390,100 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
         heatColour = Color.fromRGBO(196, 196, 196, 1);
       }
 
-      return SizedBox(
-        width: 60,
-        height: 40,
-        child: Container(
-          alignment: Alignment.center,
+      String tooltipDisplay;
+      if (value == null) {
+        tooltipDisplay = "";
+      } else {
+        tooltipDisplay = NumberFormat.percentPattern().format(value).toString();
+      }
+
+      return Flexible(
+        flex: 12,
+        child: Tooltip(
+          message: tooltipDisplay,
+          verticalOffset: -10,
           decoration: BoxDecoration(
-            color: heatColour,
-            borderRadius: BorderRadius.circular(10),
+            boxShadow: [BoxShadow(color: Colors.transparent, )],
           ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-          ),),
+          textStyle: TextStyle(
+            backgroundColor: Colors.transparent,
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: heatColour,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
       );
     }
 
-    SizedBox spacing = SizedBox(height: 5, width: 5,);
+    Widget spacing = Flexible(
+      flex: 1,
+      child: Container(),
+    );
+
+    Widget heatmapColumn(List<Widget> items) {
+      List<Widget> _outputColumnChildren = [];
+      for (int index=0; index<items.length; index++){
+        _outputColumnChildren.add(items[index]);
+        _outputColumnChildren.add(spacing);
+      }
+      return Flexible(
+        flex: 12,
+        child: Column(
+          children: _outputColumnChildren,
+        ),
+      );
+    }
 
     return Container(
+      height: 200,
       child: Row(children: <Widget>[
-        Column(
-          children: <Widget>[
-            heatmapUnit("指標", null),
-            spacing,
-            heatmapUnit("PEG", null),
-            spacing,
-            heatmapUnit("CFER", null),
-            spacing,
-            heatmapUnit("GVI", null),
-            spacing,
-            heatmapUnit("Debt Ratio", null),
-          ],
-        ),
+        heatmapColumn([
+          heatmapUnit("指標", null),
+          heatmapUnit("PEG", null),
+          heatmapUnit("CFER", null),
+          heatmapUnit("GVI", null),
+          heatmapUnit("Debt Ratio", null),
+        ]),
         spacing,
-        Column(
-          children: <Widget>[
-            heatmapUnit("去年", null),
-            spacing,
-            heatmapUnit("", 0.07),
-            spacing,
-            heatmapUnit("", 0.07),
-            spacing,
-            heatmapUnit("", -0.12),
-            spacing,
-            heatmapUnit("", 0),
-          ],
-        ),
+        heatmapColumn([
+          heatmapUnit("去年", null),
+          heatmapUnit("", 0.07),
+          heatmapUnit("", 0.07),
+          heatmapUnit("", -0.12),
+          heatmapUnit("", 0),
+        ]),
         spacing,
-        Column(
-          children: <Widget>[
-            heatmapUnit("今年", null),
-            spacing,
-            heatmapUnit("", 0.07),
-            spacing,
-            heatmapUnit("", 0.07),
-            spacing,
-            heatmapUnit("", 0),
-            spacing,
-            heatmapUnit("", -0.17),
-          ],
-        ),
+        heatmapColumn([
+          heatmapUnit("今年", null),
+          heatmapUnit("", 0.07),
+          heatmapUnit("", 0.07),
+          heatmapUnit("", 0),
+          heatmapUnit("", -0.17),
+        ]),
         spacing,
-        Column(
-          children: <Widget>[
-            heatmapUnit("上個月", null),
-            spacing,
-            heatmapUnit("", 0.12),
-            spacing,
-            heatmapUnit("", 0.17),
-            spacing,
-            heatmapUnit("", -0.07),
-            spacing,
-            heatmapUnit("", 0),
-          ],
-        ),
+        heatmapColumn([
+          heatmapUnit("上個月", null),
+          heatmapUnit("", 0.12),
+          heatmapUnit("", 0.17),
+          heatmapUnit("", -0.07),
+          heatmapUnit("", 0),
+        ]),
         spacing,
-        Column(
-          children: <Widget>[
-            heatmapUnit("這個月", null),
-            spacing,
-            heatmapUnit("", 0.17),
-            spacing,
-            heatmapUnit("", 0.12),
-            spacing,
-            heatmapUnit("", -0.17),
-            spacing,
-            heatmapUnit("", 0.07),
-          ],
-        ),
+        heatmapColumn([
+          heatmapUnit("這個月", null),
+          heatmapUnit("", 0.17),
+          heatmapUnit("", 0.12),
+          heatmapUnit("", -0.17),
+          heatmapUnit("", 0.07),
+        ]),
       ],),
     );
   }
@@ -438,22 +501,31 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
     }
 
     return
-      ButtonTheme(
-        minWidth: 55,
-        height: 30,
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(color: buttonColour)),
-          onPressed: () {
-            setState(() {
-              selectedTab = tabKey;
-            });
-          },
-          color: buttonColour,
-          textColor: textColour,
-          child: Text(title, style: TextStyle(fontSize: 12)),
-        ));
+      Expanded(
+        flex: 10,
+        child: ButtonTheme(
+            minWidth: 40,
+            height: 30,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: BorderSide(color: buttonColour)),
+              onPressed: () {
+                setState(() {
+                  selectedTab = tabKey;
+                });
+              },
+              color: buttonColour,
+              textColor: textColour,
+              child: AutoSizeText(
+                  title,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  minFontSize: 2,
+                  style: TextStyle(fontSize: 12)
+              ),
+            )),
+      );
   }
 
   @override
@@ -476,23 +548,29 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
         color: Color.fromRGBO(241, 241, 241, 1),
         borderRadius: BorderRadius.circular(20),
       ),
-      padding: EdgeInsets.only(left: 15, right: 5, bottom: 15),
+      padding: EdgeInsets.only(left: 10, right: 10, bottom: 15),
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              button('financial', '財務'),
-              SizedBox(width: 10, ),
-              button('chip', '籌碼'),
-              SizedBox(width: 10, ),
-              button('technical', '技術'),
-              SizedBox(width: 10, ),
-              button('sector_information', '產業資訊'),
-              SizedBox(width: 10, ),
-              button('news', '新聞'),
-            ],
+          Container(
+            padding: EdgeInsets.only(left: 5),
+            child: Row(
+              children: <Widget>[
+                button('financial', '財務'),
+                Expanded(flex: 1, child: Container(),),
+                button('chip', '籌碼'),
+                Expanded(flex: 1, child: Container(),),
+                button('technical', '技術'),
+                Expanded(flex: 1, child: Container(),),
+                button('sector_information', '產業資訊'),
+                Expanded(flex: 1, child: Container(),),
+                button('news', '新聞'),
+              ],
+            ),
           ),
-          subTabs[selectedTab]
+          Container(
+            height: 200,
+            child: subTabs[selectedTab],
+          ),
         ],
       )
     );
