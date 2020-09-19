@@ -207,6 +207,11 @@ class KChart extends StatelessWidget {
           }
         ]
       }''',
+      extraScript: '''
+        chart.on('click', (params) => {
+          
+        });
+      ''',
     );
   }
 }
