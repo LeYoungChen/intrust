@@ -16,42 +16,55 @@ class StockDetail extends StatefulWidget {
   _StockDetailState createState() => _StockDetailState();
 }
 
-class _StockDetailState extends State<StockDetail>
-    with TickerProviderStateMixin {
+class _StockDetailState extends State<StockDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: _buildAppBar(context, widget.stock),
-        body: new ListView.builder(
-            itemCount: 1,
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              return new StickyHeader(
-                header: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.width * 0.3,
-                  child: BasicInformation(
-                    stock: widget.stock,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.width * 0.3,
+              child: BasicInformation(
+                stock: widget.stock,
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
                   ),
-                ),
-                content: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                          padding:
-                              EdgeInsets.only(left: 20, right: 20, top: 10),
-                          child: kChartDisplay(
-                              historicPrices: widget.stock.historicPrice)),
-                      Padding(
-                          padding:
-                              EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
-                          child: AdditionalInformation(stock: widget.stock)),
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      Container(
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 20, right: 20, top: 10),
+                                child: kChartDisplay(
+                                    historicPrices:
+                                        widget.stock.historicPrice)),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 20, right: 20, top: 10, bottom: 20),
+                                child:
+                                    AdditionalInformation(stock: widget.stock)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              );
-            }));
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -83,12 +96,12 @@ class BasicInformation extends StatefulWidget {
 
   @override
   _basicInformationState createState() => _basicInformationState(
-    open: stock.open.toStringAsFixed(2),
-    close: stock.close.toStringAsFixed(2),
-    low: stock.low.toStringAsFixed(2),
-    high: stock.high.toStringAsFixed(2),
-    volume: stock.compactVolume,
-  );
+        open: stock.open.toStringAsFixed(2),
+        close: stock.close.toStringAsFixed(2),
+        low: stock.low.toStringAsFixed(2),
+        high: stock.high.toStringAsFixed(2),
+        volume: stock.compactVolume,
+      );
 }
 
 class _basicInformationState extends State<BasicInformation> {
@@ -109,7 +122,6 @@ class _basicInformationState extends State<BasicInformation> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Color.fromRGBO(238, 239, 242, 1.0),
       width: double.infinity,
@@ -150,134 +162,135 @@ class _basicInformationState extends State<BasicInformation> {
           Expanded(
             flex: 6,
             child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 7,
+              children: <Widget>[
+                Expanded(
+                  flex: 7,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: FractionallySizedBox(
+                          child: AutoSizeText(
+                            widget.stock.price.toStringAsFixed(2),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 32),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: AutoSizeText(
+                          widget.stock.priceDifference.toStringAsFixed(2) +
+                              " (" +
+                              widget.stock.pctPriceDifference
+                                  .toStringAsFixed(2) +
+                              "%)",
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          minFontSize: 2,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: widget.stock.valueColour,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Container(),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        AutoSizeText(
+                          "成交量",
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        AutoSizeText(
+                          volume,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
-                          Expanded(
-                            flex: 8,
-                            child: FractionallySizedBox(
-                              child: AutoSizeText(
-                                widget.stock.price.toStringAsFixed(2),
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 32),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: AutoSizeText(
-                              widget.stock.priceDifference.toStringAsFixed(2) +
-                                  " (" +
-                                  widget.stock.pctPriceDifference.toStringAsFixed(2) +
-                                  "%)",
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              minFontSize: 2,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                                color: widget.stock.valueColour,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  Expanded(
-                    flex: 4,
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          AutoSizeText(
-                            "成交量",
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          AutoSizeText(
-                            volume,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: const VerticalDivider(
-                      color: Color.fromRGBO(151, 153, 154, 1),
-                      indent: 15,
-                      endIndent: 15,
-                    ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: const VerticalDivider(
+                    color: Color.fromRGBO(151, 153, 154, 1),
+                    indent: 15,
+                    endIndent: 15,
                   ),
-                  Expanded(
-                    flex: 4,
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "高",
-                            style: TextStyle(fontSize: 14),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "高",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          high,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
-                          Text(
-                            high,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: const VerticalDivider(
-                      color: Color.fromRGBO(151, 153, 154, 1),
-                      indent: 15,
-                      endIndent: 15,
-                    ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: const VerticalDivider(
+                    color: Color.fromRGBO(151, 153, 154, 1),
+                    indent: 15,
+                    endIndent: 15,
                   ),
-                  Expanded(
-                    flex: 4,
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "低",
-                            style: TextStyle(fontSize: 14),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "低",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          low,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
-                          Text(
-                            low,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
-                ],
+                ),
+              ],
             ),
           ),
         ],
@@ -311,46 +324,46 @@ class _kChartDisplayState extends State<kChartDisplay> {
         maxWidth: double.infinity,
       ),
       child: new Stack(
-          children: <Widget>[
-            Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(241, 241, 241, 1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                        alignment: Alignment.bottomCenter,
-                        height: 250,
-                        width: double.infinity,
-                        child: KChart(
-                          historicPrices: widget.historicPrices,
-                          kChartRange: kChartRanges[selectedKChartRange],
-                        )),
-                  ],
+        children: <Widget>[
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(241, 241, 241, 1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                      alignment: Alignment.bottomCenter,
+                      height: 250,
+                      width: double.infinity,
+                      child: KChart(
+                        historicPrices: widget.historicPrices,
+                        kChartRange: kChartRanges[selectedKChartRange],
+                      )),
+                ],
+              )),
+          new Positioned(
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
+                alignment: Alignment.centerLeft,
+                child: CupertinoSlidingSegmentedControl(
+                  groupValue: selectedKChartRange,
+                  children: {
+                    'd': Text('D'),
+                    'w': Text('W'),
+                    'm': Text('M'),
+                  },
+                  onValueChanged: (value) {
+                    setState(() {
+                      selectedKChartRange = value;
+                    });
+                  },
                 )),
-            new Positioned(
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-                  alignment: Alignment.centerLeft,
-                  child: CupertinoSlidingSegmentedControl(
-                    groupValue: selectedKChartRange,
-                    children: {
-                      'd': Text('D'),
-                      'w': Text('W'),
-                      'm': Text('M'),
-                    },
-                    onValueChanged: (value) {
-                      setState(() {
-                        selectedKChartRange = value;
-                      });
-                    },
-                  )),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -365,11 +378,9 @@ class AdditionalInformation extends StatefulWidget {
 }
 
 class _AdditionalInformationState extends State<AdditionalInformation> {
-
   String selectedTab = 'financial';
 
   Widget financialHeatMap() {
-
     Widget heatmapUnit(String text, num value) {
       Color heatColour;
       if (value == null) {
@@ -403,7 +414,11 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
           message: tooltipDisplay,
           verticalOffset: -10,
           decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.transparent, )],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.transparent,
+              )
+            ],
           ),
           textStyle: TextStyle(
             backgroundColor: Colors.transparent,
@@ -430,7 +445,7 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
 
     Widget heatmapColumn(List<Widget> items) {
       List<Widget> _outputColumnChildren = [];
-      for (int index=0; index<items.length; index++){
+      for (int index = 0; index < items.length; index++) {
         _outputColumnChildren.add(items[index]);
         _outputColumnChildren.add(spacing);
       }
@@ -444,52 +459,54 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
 
     return Container(
       height: 200,
-      child: Row(children: <Widget>[
-        heatmapColumn([
-          heatmapUnit("指標", null),
-          heatmapUnit("PEG", null),
-          heatmapUnit("CFER", null),
-          heatmapUnit("GVI", null),
-          heatmapUnit("Debt Ratio", null),
-        ]),
-        spacing,
-        heatmapColumn([
-          heatmapUnit("去年", null),
-          heatmapUnit("", 0.07),
-          heatmapUnit("", 0.07),
-          heatmapUnit("", -0.12),
-          heatmapUnit("", 0),
-        ]),
-        spacing,
-        heatmapColumn([
-          heatmapUnit("今年", null),
-          heatmapUnit("", 0.07),
-          heatmapUnit("", 0.07),
-          heatmapUnit("", 0),
-          heatmapUnit("", -0.17),
-        ]),
-        spacing,
-        heatmapColumn([
-          heatmapUnit("上個月", null),
-          heatmapUnit("", 0.12),
-          heatmapUnit("", 0.17),
-          heatmapUnit("", -0.07),
-          heatmapUnit("", 0),
-        ]),
-        spacing,
-        heatmapColumn([
-          heatmapUnit("這個月", null),
-          heatmapUnit("", 0.17),
-          heatmapUnit("", 0.12),
-          heatmapUnit("", -0.17),
-          heatmapUnit("", 0.07),
-        ]),
-      ],),
+      child: Row(
+        children: <Widget>[
+          heatmapColumn([
+            heatmapUnit("指標", null),
+            heatmapUnit("PEG", null),
+            heatmapUnit("CFER", null),
+            heatmapUnit("GVI", null),
+            heatmapUnit("Debt Ratio", null),
+          ]),
+          spacing,
+          heatmapColumn([
+            heatmapUnit("去年", null),
+            heatmapUnit("", 0.07),
+            heatmapUnit("", 0.07),
+            heatmapUnit("", -0.12),
+            heatmapUnit("", 0),
+          ]),
+          spacing,
+          heatmapColumn([
+            heatmapUnit("今年", null),
+            heatmapUnit("", 0.07),
+            heatmapUnit("", 0.07),
+            heatmapUnit("", 0),
+            heatmapUnit("", -0.17),
+          ]),
+          spacing,
+          heatmapColumn([
+            heatmapUnit("上個月", null),
+            heatmapUnit("", 0.12),
+            heatmapUnit("", 0.17),
+            heatmapUnit("", -0.07),
+            heatmapUnit("", 0),
+          ]),
+          spacing,
+          heatmapColumn([
+            heatmapUnit("這個月", null),
+            heatmapUnit("", 0.17),
+            heatmapUnit("", 0.12),
+            heatmapUnit("", -0.17),
+            heatmapUnit("", 0.07),
+          ]),
+          // todo: add headmap colour legend bar
+        ],
+      ),
     );
   }
-  
-  Widget button(String tabKey, String title) {
 
+  Widget button(String tabKey, String title) {
     Color buttonColour;
     Color textColour;
     if (tabKey == selectedTab) {
@@ -500,79 +517,94 @@ class _AdditionalInformationState extends State<AdditionalInformation> {
       textColour = Colors.black;
     }
 
-    return
-      Expanded(
-        flex: 10,
-        child: ButtonTheme(
-            minWidth: 40,
-            height: 30,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: BorderSide(color: buttonColour)),
-              onPressed: () {
-                setState(() {
-                  selectedTab = tabKey;
-                });
-              },
-              color: buttonColour,
-              textColor: textColour,
-              child: AutoSizeText(
-                  title,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  minFontSize: 2,
-                  style: TextStyle(fontSize: 12)
-              ),
-            )),
-      );
+    return Expanded(
+      flex: 10,
+      child: ButtonTheme(
+          minWidth: 40,
+          height: 30,
+          child: RaisedButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(color: buttonColour)),
+            onPressed: () {
+              setState(() {
+                selectedTab = tabKey;
+              });
+            },
+            color: buttonColour,
+            textColor: textColour,
+            child: AutoSizeText(title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                minFontSize: 2,
+                style: TextStyle(fontSize: 12)),
+          )),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
     final Map<String, Widget> subTabs = {
       'financial': financialHeatMap(),
-      'chip': Container(child: Text('chip'),),
-      'technical': Container(child: Text('technical'),),
-      'sector_information': Container(child: Text('sector_information'),),
-      'news': Container(child: Text('news'),),
+      'chip': Container(
+        child: Text('chip'),
+      ),
+      'technical': Container(
+        child: Text('technical'),
+      ),
+      'sector_information': Container(
+        child: Text('sector_information'),
+      ),
+      'news': Container(
+        child: Text('news'),
+      ),
     };
 
     return Container(
-      constraints: BoxConstraints(
-        maxHeight: double.infinity,
-        maxWidth: double.infinity,
-      ),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(241, 241, 241, 1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: EdgeInsets.only(left: 10, right: 10, bottom: 15),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 5),
-            child: Row(
-              children: <Widget>[
-                button('financial', '財務'),
-                Expanded(flex: 1, child: Container(),),
-                button('chip', '籌碼'),
-                Expanded(flex: 1, child: Container(),),
-                button('technical', '技術'),
-                Expanded(flex: 1, child: Container(),),
-                button('sector_information', '產業資訊'),
-                Expanded(flex: 1, child: Container(),),
-                button('news', '新聞'),
-              ],
+        constraints: BoxConstraints(
+          maxHeight: double.infinity,
+          maxWidth: double.infinity,
+        ),
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(241, 241, 241, 1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: EdgeInsets.only(left: 10, right: 10, bottom: 15),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(left: 5),
+              child: Row(
+                children: <Widget>[
+                  button('financial', '財務'),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  button('chip', '籌碼'),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  button('technical', '技術'),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  button('sector_information', '產業資訊'),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  button('news', '新聞'),
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: 200,
-            child: subTabs[selectedTab],
-          ),
-        ],
-      )
-    );
+            Container(
+              height: 200,
+              child: subTabs[selectedTab],
+            ),
+          ],
+        ));
   }
 }

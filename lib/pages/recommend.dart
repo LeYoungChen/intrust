@@ -72,8 +72,20 @@ class _ListState extends State<Recommended> {
             ),
           ),
           Expanded(
-            child: StockTable(
-              stocks: recommendedStocks,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width,
+                ),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  children: <Widget>[
+                    StockTable(
+                      stocks: recommendedStocks,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ]),
