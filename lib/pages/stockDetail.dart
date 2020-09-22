@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intrust/HistoricPrice.dart';
-import 'package:intrust/Stock.dart';
+import 'package:intrust/dataclasses/HistoricPrice.dart';
+import 'package:intrust/dataclasses/Stock.dart';
 import 'package:intrust/widgets/k_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 class StockDetail extends StatefulWidget {
   final Stock stock;

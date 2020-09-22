@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:intl/intl.dart';
-import 'package:intrust/HistoricPrice.dart';
-import 'package:intrust/TimePeriod.dart';
+import 'package:intrust/dataclasses/HistoricPrice.dart';
+import 'package:intrust/dataclasses/TimePeriod.dart';
 
 class KChart extends StatelessWidget {
   final List<HistoricPrice> historicPrices;

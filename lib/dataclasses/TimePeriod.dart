@@ -1,4 +1,4 @@
-import 'package:intrust/HistoricPrice.dart';
+import 'package:intrust/dataclasses/HistoricPrice.dart';
 
 class TimePeriod {
   String name;

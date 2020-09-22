@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intrust/Stock.dart';
-import 'package:intrust/stockDetail.dart';
+import 'package:intrust/dataclasses/Stock.dart';
+import 'package:intrust/pages/stockDetail.dart';
 
 class StockTable extends StatefulWidget {
   final List<Stock> stocks;

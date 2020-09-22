@@ -1,4 +1,4 @@
-import 'package:intrust/HistoricPrice.dart';
+import 'package:intrust/dataclasses/HistoricPrice.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

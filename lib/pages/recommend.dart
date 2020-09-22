@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
-import "package:intrust/Stock.dart";
+import 'package:flutter/rendering.dart';
+import 'package:intrust/dataclasses/Stock.dart';
+import 'package:intrust/dataclasses/PriceWeightedIndex.dart';
 import "package:intrust/widgets/StockTable.dart";
+import 'package:auto_size_text/auto_size_text.dart';
 
 class Recommended extends StatefulWidget {
   @override
@@ -42,6 +45,33 @@ class _ListState extends State<Recommended> {
     }
   ];
 
+  // todo: find out whether there will be historic value or not, are we showing any more information than just this price difference?
+  List<Map<String, dynamic>> hardcodedPriceWeightedIndexes = [
+    {
+      "name": "台加權指",
+      "value": 123404.04,
+      "priceDifference": 109.00,
+      "pctPriceDifference": 0.0088,
+    }, {
+      "name": "納斯達克",
+      "value": 123404.04,
+      "priceDifference": -109.00,
+      "pctPriceDifference": -0.0088,
+    },{
+      "name": "日經指數",
+      "value": 123404.04,
+      "priceDifference": 109.00,
+      "pctPriceDifference": 0.0088,
+    },{
+      "name": "恆生指數",
+      "value": 123404.04,
+      "priceDifference": -109.00,
+      "pctPriceDifference": -0.0088,
+    },
+  ];
+
+  List<PriceWeightedIndex> priceWeightedIndexes;
+
   List<Stock> recommendedStocks;
 
   @override
@@ -49,13 +79,17 @@ class _ListState extends State<Recommended> {
     super.initState();
     recommendedStocks =
         hardcodedJson.map<Stock>((json) => new Stock.fromJson(json)).toList();
+    priceWeightedIndexes = hardcodedPriceWeightedIndexes
+        .map<PriceWeightedIndex>(
+            (json) => new PriceWeightedIndex.fromJson(json))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(238, 239, 242, 1.0),
+        backgroundColor: Color.fromRGBO(238, 238, 238, 1),
         elevation: 0,
         title: Text("INTRUST"),
       ),
@@ -64,12 +98,12 @@ class _ListState extends State<Recommended> {
         width: double.infinity,
         child: Column(children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Suggested List",
-              textAlign: TextAlign.left,
-            ),
+              height: 110,
+              padding: EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(238, 238, 238, 1.0),
+              ),
+              child: _priceWeightedIndexGallery(priceWeightedIndexes: priceWeightedIndexes)
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -89,6 +123,83 @@ class _ListState extends State<Recommended> {
             ),
           ),
         ]),
+      ),
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  const _Card({
+    Key key, 
+    this.priceWeightedIndex
+  }) : super(key: key); 
+  
+  final PriceWeightedIndex priceWeightedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [BoxShadow(
+          color: Color.fromRGBO(205, 205, 205, 1),
+          offset: Offset(5.0, 5.0),
+          blurRadius: 5.0,
+        )],
+      ),
+      padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0, ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          AutoSizeText(priceWeightedIndex.name),
+          AutoSizeText(
+            priceWeightedIndex.value.toStringAsFixed(2),
+            maxLines: 1,
+            style: TextStyle(
+              color: priceWeightedIndex.valueColour,
+            ),
+          ),
+          AutoSizeText(
+              priceWeightedIndex.priceDifference.toStringAsFixed(2) + " (" + (priceWeightedIndex.pctPriceDifference * 100).toStringAsFixed(2) + "%)",
+            maxLines: 1,
+            style: TextStyle(
+              color: priceWeightedIndex.valueColour,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _priceWeightedIndexGallery extends StatelessWidget {
+  const _priceWeightedIndexGallery({
+    Key key,
+    this.priceWeightedIndexes
+  }) : super(key: key);
+
+  final List<PriceWeightedIndex> priceWeightedIndexes;
+
+  Widget _builder(BuildContext context, int index) {
+    return Container(
+        width: MediaQuery.of(context).size.width * 0.35,
+        child: Card(
+            child: _Card(priceWeightedIndex: priceWeightedIndexes[index])
+        )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10.0, left: 25.0,),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        controller: PageController(viewportFraction: 0.7),
+        itemCount: priceWeightedIndexes.length,
+        itemBuilder: (context, index) => _builder(context, index),
       ),
     );
   }
