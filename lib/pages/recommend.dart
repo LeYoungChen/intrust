@@ -91,7 +91,24 @@ class _ListState extends State<Recommended> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(238, 238, 238, 1),
         elevation: 0,
-        title: Text("INTRUST"),
+        centerTitle: true,
+        // fixme: what does the menu icon do???
+        leading: GestureDetector(
+          onTap: (){},
+          child: Icon(Icons.menu),
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: (){},
+              child: Icon(Icons.search),
+            ),
+          )
+        ],
+        title: Image(
+          image: AssetImage('assets/images/logo_horizontal.png'),
+          height: 24,),
       ),
       body: Container(
         alignment: Alignment.topLeft,
