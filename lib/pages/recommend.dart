@@ -170,7 +170,14 @@ class _Card extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          AutoSizeText(priceWeightedIndex.name),
+          AutoSizeText(
+            priceWeightedIndex.name,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            )
+          ),
           AutoSizeText(
             priceWeightedIndex.value.toStringAsFixed(2),
             maxLines: 1,
