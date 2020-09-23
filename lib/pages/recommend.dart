@@ -114,8 +114,8 @@ class _ListState extends State<Recommended> {
         width: double.infinity,
         child: Column(children: <Widget>[
           Container(
-              height: 110,
-              padding: EdgeInsets.only(bottom: 10),
+              height: 120,
+              padding: EdgeInsets.symmetric(vertical: 10.0),
               decoration: BoxDecoration(
                 color: Color.fromRGBO(238, 238, 238, 1.0),
               ),
