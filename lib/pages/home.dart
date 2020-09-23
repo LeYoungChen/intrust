@@ -37,6 +37,7 @@ class _HomeState extends State<Home> {
     return CupertinoTabScaffold(
         backgroundColor: Theme.of(context).accentColor,
         tabBar: CupertinoTabBar(
+          backgroundColor: Theme.of(context).accentColor,
           activeColor: Theme.of(context).indicatorColor,
           inactiveColor: Theme.of(context).iconTheme.color,
           items: <BottomNavigationBarItem>[
