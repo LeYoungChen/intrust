@@ -89,7 +89,6 @@ class _ListState extends State<Recommended> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(238, 238, 238, 1),
         elevation: 0,
         centerTitle: true,
         // fixme: what does the menu icon do???

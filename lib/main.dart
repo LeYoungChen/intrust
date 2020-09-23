@@ -15,6 +15,10 @@ class MyApp extends StatelessWidget {
       title: 'InTrust',
       theme: new ThemeData(
         primaryColor: Colors.white,
+        accentColor: Color.fromRGBO(238, 238, 238, 1),
+        indicatorColor: Color.fromRGBO(219, 61, 38, 1),
+        appBarTheme: AppBarTheme(color: Color.fromRGBO(238, 238, 238, 1)),
+        iconTheme: IconThemeData(color: Color.fromRGBO(186, 188, 189, 1)),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         fontFamily: 'DIN2014',
       ),

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class Machine extends StatefulWidget {
+class UserPage extends StatefulWidget {
   @override
-  _MachineState createState() => _MachineState();
+  _UserPageState createState() => _UserPageState();
 }
 
-class _MachineState extends State<Machine> {
+class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('我的投資策略'),
+        title: Text('使用者介面'),
       ),
     );
   }
